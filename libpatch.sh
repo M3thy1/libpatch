@@ -27,7 +27,11 @@ else
     echo "[-] Error: elf file not found." >&2
 fi
 
-if [ -d "$2" ]; then
+if [ -n "$2" ]; then
+    if [ ! -d "$2" ]; then
+        echo "[-] $2 is not a directory." >&2
+        exit 1
+    fi
     if [ -f ${libc_path}/ld-[2].[0-9][0-9].so ]; then
         $patchelf_bin_path --set-interpreter $libc_path/ld-[2].[0-9][0-9].so $elf_path
     elif [ -f $libc_path/ld-linux-x86-64.so.2 ]; then
@@ -44,6 +48,4 @@ if [ -d "$2" ]; then
     else
         echo "[-] Error: libc.so.6 not found." >&2
     fi
-else
-    echo "[-] $2 is not a directory." >&2
 fi
